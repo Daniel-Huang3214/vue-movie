@@ -13,6 +13,7 @@ let overview = ref("");
 let language = ref("");
 let voteAverage = ref(0);
 let voteCount = ref(0);
+
 axios
   .get(`https://api.themoviedb.org/3/movie/424783`, {
     params: {
@@ -52,7 +53,7 @@ axios
     <option value="205321">Sharknado</option>
     <option value="447404">Detective Pikachu</option>
   </select>
-  <button id="button" onclick="onChange()">Get</button>
+  <button id="button" @click="onChange">Get</button>
 
   <div id="movie">
   <h1>{{ originalTitle }}</h1>
