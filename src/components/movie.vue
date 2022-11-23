@@ -2,6 +2,8 @@
 import axios from "axios"
 import { ref } from "vue"
 
+let activate = ref(false);
+let movieId = ref(424783);
 let popularity = ref(0);
 let movieTrailer = ref("");
 let poster = ref("");
@@ -13,35 +15,39 @@ let overview = ref("");
 let language = ref("");
 let voteAverage = ref(0);
 let voteCount = ref(0);
-axios
-  .get(`https://api.themoviedb.org/3/movie/424783`, {
-    params: {
-      api_key: "0dcabfe51b80fa2de3e80d7d256e0e81",
-      append_to_response: "videos",
-    },
-  }).then((movieData) => {
-    const trailers = movieData.data.videos.results.filter(
+
+const onChange = async () => {
+  await axios
+    .get(`https://api.themoviedb.org/3/movie/${movieId.value}`, {
+      params: {
+        api_key: "0dcabfe51b80fa2de3e80d7d256e0e81",
+        append_to_response: "videos",
+      },
+    }).then((movieData) => {
+      const trailers = movieData.data.videos.results.filter(
         (trailer) => trailer.type === "Trailer"
       );
-    console.log(movieData.data);
-    movieTrailer.value = `https://www.youtube.com/embed/${trailers.at(0).key}`;
-    poster.value = `https://image.tmdb.org/t/p/w500${movieData.data.poster_path}`;
-    backdrop.value = `https://image.tmdb.org/t/p/w500${movieData.data.backdrop_path}`;
-    title.value = `${movieData.data.title}`;
-    originalTitle.value = `${movieData.data.original_title}`;
-    release.value = `Release Date: ${movieData.data.release_date}`;
-    overview.value = `${movieData.data.overview}`;
-    language.value = `Original Language: ${movieData.data.original_language}`;
-    popularity.value = `Popularity: ${movieData.data.popularity}`;
-    voteAverage.value = `${movieData.data.vote_average}` 
-    voteCount.value = `${movieData.data.vote_count}`;
-  });
+      console.log(movieData.data);
+      movieTrailer.value = `https://www.youtube.com/embed/${trailers.at(0).key}`;
+      poster.value = `https://image.tmdb.org/t/p/w500${movieData.data.poster_path}`;
+      backdrop.value = `https://image.tmdb.org/t/p/w500${movieData.data.backdrop_path}`;
+      title.value = `${movieData.data.title}`;
+      originalTitle.value = `${movieData.data.original_title}`;
+      release.value = `Release Date: ${movieData.data.release_date}`;
+      overview.value = `${movieData.data.overview}`;
+      language.value = `Original Language: ${movieData.data.original_language}`;
+      popularity.value = `Popularity: ${movieData.data.popularity}`;
+      voteAverage.value = `${movieData.data.vote_average}`
+      voteCount.value = `${movieData.data.vote_count}`;
+    })
+    activate.value = true;
+};
 
 </script>
 
 <template>
-  <select id="movies">
-    <option class="bumblebee" value="424783">BumbleBee</option>
+  <select v-model="movieId" id="movies">
+    <option value="424783">BumbleBee</option>
     <option value="68726">Pacific Rim</option>
     <option value="396535">Train to Busan</option>
     <option value="198663">Maze Runner</option>
@@ -52,22 +58,22 @@ axios
     <option value="205321">Sharknado</option>
     <option value="447404">Detective Pikachu</option>
   </select>
-  <button id="button" onclick="onChange()">Get</button>
+  <button id="button" @click="onChange">Get</button>
 
-  <div id="movie">
-  <h1>{{ originalTitle }}</h1>
-  <h2>{{ title }}</h2>
-  <img id="poster" v-bind:src="`${poster}`">
-  <p id="vote-average">| Vote Average: {{ voteAverage }}</p>
-  <p id="vote-count">| Vote Count: {{ voteCount }}</p>
-  <img id="background" v-bind:src="`${backdrop}`">
-  <p id="release">{{ release }}</p>
-  <p id="language">{{ language }}</p>
-  <p id="popularity">| {{ popularity }}</p>
-  <p id="overview">{{overview}}</p>
-  <iframe v-bind:src="`${movieTrailer}`"></iframe>
-  <div id="layer"></div>
-</div>
+  <div id="movie" v-if="activate">
+    <h1>{{ originalTitle }}</h1>
+    <h2>{{ title }}</h2>
+    <img id="poster" v-bind:src="`${poster}`">
+    <p id="vote-average">| Vote Average: {{ voteAverage }}</p>
+    <p id="vote-count">| Vote Count: {{ voteCount }}</p>
+    <img id="background" v-bind:src="`${backdrop}`">
+    <p id="release">{{ release }}</p>
+    <p id="language">{{ language }}</p>
+    <p id="popularity">| {{ popularity }}</p>
+    <p id="overview">{{ overview }}</p>
+    <iframe v-bind:src="`${movieTrailer}`"></iframe>
+    <div id="layer"></div>
+  </div>
 </template>
 
 <style scoped>
@@ -204,5 +210,4 @@ label {
   grid-column: 3;
   grid-row: 5;
 }
-
 </style>
