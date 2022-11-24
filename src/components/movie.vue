@@ -42,7 +42,7 @@ axios
 
 <template>
   <select id="movies">
-    <option class="bumblebee" value="424783">BumbleBee</option>
+    <option value="424783">BumbleBee</option>
     <option value="68726">Pacific Rim</option>
     <option value="396535">Train to Busan</option>
     <option value="198663">Maze Runner</option>
