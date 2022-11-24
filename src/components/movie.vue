@@ -1,28 +1,30 @@
 <script setup>
-import axios from "axios"
-import { ref } from "vue"
+import axios from "axios";
+import { ref } from "vue";
 
 let movie = ref(false);
 let movieId = ref(424783);
 let movieTrailer = ref("");
 
 const onChange = () => {
-   axios
+  axios
     .get(`https://api.themoviedb.org/3/movie/${movieId.value}`, {
       params: {
         api_key: "0dcabfe51b80fa2de3e80d7d256e0e81",
         append_to_response: "videos",
       },
-    }).then((movieData) => {
+    })
+    .then((movieData) => {
       const trailers = movieData.data.videos.results.filter(
         (trailer) => trailer.type === "Trailer"
       );
       console.log(movieData.data);
-      movie.value = movieData.data
-      movieTrailer.value = `https://www.youtube.com/embed/${trailers.at(0).key}`;
-    })
+      movie.value = movieData.data;
+      movieTrailer.value = `https://www.youtube.com/embed/${
+        trailers.at(0).key
+      }`;
+    });
 };
-
 </script>
 
 <template>
@@ -43,10 +45,16 @@ const onChange = () => {
   <div id="movie" v-if="movie">
     <h1>{{ movie.original_title }}</h1>
     <h2>{{ movie.title }}</h2>
-    <img id="poster" v-bind:src="`https://image.tmdb.org/t/p/w500${movie.poster_path}`">
+    <img
+      id="poster"
+      v-bind:src="`https://image.tmdb.org/t/p/w500${movie.poster_path}`"
+    />
     <p id="vote-average">| Vote Average: {{ movie.vote_average }}</p>
     <p id="vote-count">| Vote Count: {{ movie.vote_count }}</p>
-    <img id="background" v-bind:src="`https://image.tmdb.org/t/p/w500${movie.backdrop_path}`">
+    <img
+      id="background"
+      v-bind:src="`https://image.tmdb.org/t/p/w500${movie.backdrop_path}`"
+    />
     <p id="release">Release Date: {{ movie.release_date }}</p>
     <p id="language">Original Language: {{ movie.original_language }}</p>
     <p id="popularity">| Popularity: {{ movie.popularity }}</p>
