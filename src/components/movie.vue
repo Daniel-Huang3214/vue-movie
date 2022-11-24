@@ -82,7 +82,8 @@ h2 {
 }
 
 iframe {
-  width: 30vw;
+  position: relative;
+  width: 34vw;
   height: 40vh;
   grid-column: 3;
   grid-row: 15;
@@ -147,6 +148,7 @@ label {
   height: 110%;
   grid-column: span 3;
   grid-row: span 10;
+  filter: blur(3px);
 }
 
 #layer {
@@ -159,10 +161,10 @@ label {
 }
 
 #poster {
-  height: 90vh;
+  height: 70vh;
   width: 30vw;
   grid-column: 1;
-  grid-row: 4;
+  grid-row: 5;
 }
 
 #description {
